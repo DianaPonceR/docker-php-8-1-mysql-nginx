@@ -4,17 +4,17 @@ services:
     build:
       context: .
       dockerfile: php.Dockerfile
-    container_name: php-unit-herencia
+    container_name: api-rest-php
     working_dir: /var/www/
     volumes:
       - ./src:/var/www
     networks:
-      - php-unit-herenncia-network
+      - api-rest-php-network
 
   # MySQL database service
   db:
     image: mysql:5.7
-    container_name: mysql-db-php-unit-herencia
+    container_name: mysql-db-php
     ports:
       - "3306:3306"
     environment:
@@ -25,19 +25,19 @@ services:
     env_file:
       - ./.env
     networks:
-      - php-unit-herenncia-network
+      - api-rest-php-network
 
   nginx:
     image: nginx:alpine
-    container_name: nginx-php-unit-herencia
+    container_name: nginx-php
     ports:
       - "8000:80"
     volumes:
       - ./src:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - php-unit-herenncia-network
+      - api-rest-php-network
 
 networks:
-  php-unit-herenncia-network:
+  api-rest-php-network:
     driver: bridge
