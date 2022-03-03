@@ -41,7 +41,7 @@ Dentro de la configuración del __Dockerfile__, instala __composer__.
             echo '<br />';
        }
        ```
-      Dentro del directorio `/src` deberán de estar todos los archivos __.php__.
+      
 5. Correr el comando desde la raiz de este repo:
 
    ```bash
