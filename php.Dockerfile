@@ -1,5 +1,7 @@
 FROM php:8.1-fpm
 
+LABEL maintainer="Diana Ponce"
+
 COPY ./src/ /var/www
 
 # install system dependencies
@@ -10,11 +12,20 @@ RUN apt update && apt install -y \
     unzip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# install php extensions
-RUN docker-php-ext-install pdo_mysql
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Get latest composer
-# COPY --from=composer:latest /usr/bin/composer /user/bin/composer
+# install laravel as global with composer
+RUN composer global require laravel/installer
+
+# install php extensions
+RUN docker-php-ext-install pdo pdo_mysql
+
+RUN echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 # Set working dir
 WORKDIR /var/www
+
+# Create www user
+RUN useradd -ms /bin/bash -g root -G sudo -u 1000 www
+USER www
