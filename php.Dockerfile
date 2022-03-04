@@ -24,7 +24,7 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 # Set working dir
-WORKDIR /var/www
+WORKDIR /var/www/api-rest-curso-pl
 
 # Create www user
 RUN useradd -ms /bin/bash -g root -G sudo -u 1000 www
