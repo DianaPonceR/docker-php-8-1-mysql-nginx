@@ -63,27 +63,48 @@ Dentro de la configuración del __Dockerfile__, instala __composer__.
    ```
 
 
-## ¿Cómo usar esta receta con un proyecto laravel v9.x?
+## ¿Cómo usar esta receta con un proyecto existente de laravel v9.x?
 
 1. Clonar esta receta de docker: [https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git](https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git)
-2. Renombrar el archivo `.env-example` a solo `.env`
-3. Editar la línea 6 del archivo `nginx/conf.d/default.conf` y reemplazar `<name-directory>` por el nombre del directorio en donde vive el proyecto laravel:
+2. Dentro del directorio `/src` deberás clonar tu proyecto laravel. De tal manera que quede ubicado de la siguiente forma: `/src/laravel-app/`
+3. Editar la línea 6 del archivo `nginx/conf.d/default.conf` y reemplazar `<laravel-app>` por el nombre del directorio en donde vive el proyecto laravel:
 
    ```bash
-   root /var/www/<name-directory>/public;
+   root /var/www/<laravel-app>/public;
    ```
-4. Dentro del directorio `/src` deberás clonar tu proyecto laravel. De tal manera que quede ubicado de la siguiente manera: `/src/laravel-app/`
-5. Correr el comando desde la raiz del repo de docker:
+
+4. Editar la línea 27 del archivo `php.Dockerfile` y reemplazar `<laravel-app>` por el nombre del directorio donde vive el proyecto laravel:
+   
+   ```bash
+   WORKDIR /var/www/<laravel-app>
+   ```
+   
+5. Editar la línea 8 del archivo `docker-compose.yml` y reemplazar `<laravel-app>` por el nombre del directorio donde vive el proyecto laravel:
+
+   ```bash
+   working_dir: /var/www/<laravel-app>
+   ```
+   
+6. Desde la terminal y en la raíz de la receta docker, correr el siguiente comando para instalar las dependencias del proyecto laravel:
+   
+   ```bash
+   docker exec <container-name> composer install
+   ```
+   
+   Otra forma es entrar al contendor del servicio `app` y ejecutar el comando. Para esto se tiene que usar el nombre del servicio `app`:
+
+   ```bash
+   docker exec -it <container-name> bash
+   composer install
+   ```
+
+7. Desde la terminal y en la raíz de la receta docker, correr el comando que levanta los contenedores (por primera vez):
 
    ```bash
    docker-compose up
    ```
-6. Entrar al contendor del servicio `app` y ejecutar el comando:
-
-   ```bash
-   composer install
-   ```
-7. En caso de necesitar reconstruir la imagen, correr los siguientes comandos:
+   
+8. En caso de necesitar reconstruir la imagen, correr los siguientes comandos:
 
     ```bash
    docker-compose down
@@ -92,10 +113,14 @@ Dentro de la configuración del __Dockerfile__, instala __composer__.
    # reconstruir imagen en el background
    docker-compose up --build -d
    ```
-8. Correr algún comando de `composer` desde fuera del contenedor. Por ejemplo:
+9. Correr algún comando de `composer` o `artisan` desde fuera del contenedor. Por ejemplo:
 
    ```bash
-   docker exec php-unit-herencia composer require phpunit/phpunit
+   # composer
+   docker exec <container-name> composer require phpunit/phpunit
+   
+   # artisan
+   docker exec <container-name> artisan make:model -cmf
    ```
    
 ---
