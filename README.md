@@ -1,10 +1,16 @@
 # DOCKER PHP 8.1 FPM + MYSQL 5.7 + NGINX
 
-Receta base de __docker-compose__ para levantar algún proyecto con __php v8.1__
+Receta base de __docker-compose__ para levantar algún proyecto con __php v8.1__. 
 
-Dentro de la configuración del __Dockerfile__, instala __composer__.
+Esta receta se puede utilizar para tres fines distintos:
 
-## ¿Cómo usar esta receta con un proyecto php - Sin Frameworks?
+1. Correr archivos o aplicación de php sin frameworks (php 8.1)
+2. Levantar un proyecto existente de laravel 9 con php 8.1 y ejecutar comandos de artisan y composer desde fuera del contenedor para hacer el desarrollo más amigable. No es necesario recrear la imagen de docker cada vez que se haga algún cambio en el proyecto laravel. Sólo será necesario recrearla si se actualiza la receta docker.
+3. Crear un proyecto nuevo de laravel 9 con las mismas características del punto 2.
+
+Cada uno de estos escenarios se describen enseguida.
+
+## 1. ¿Cómo usar esta receta con un proyecto php - Sin Frameworks?
 
 1. Clonar esta receta de docker: [https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git](https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git)
 2. Renombrar el archivo `.env-example` a solo `.env`
@@ -59,11 +65,11 @@ Dentro de la configuración del __Dockerfile__, instala __composer__.
 7. Correr algún comando de `composer` desde fuera del contenedor. Por ejemplo:
 
    ```bash
-   docker exec php-unit-herencia composer require phpunit/phpunit
+   docker exec <container-name> composer require phpunit/phpunit
    ```
 
 
-## ¿Cómo usar esta receta con un proyecto existente de laravel v9.x?
+## 2. ¿Cómo usar esta receta con un proyecto existente de laravel v9.x?
 
 1. Clonar esta receta de docker: [https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git](https://github.com/DianaPonceR/docker-php-8-1-mysql-nginx.git)
 2. Dentro del directorio `/src` deberás clonar tu proyecto laravel. De tal manera que quede ubicado de la siguiente forma: `/src/laravel-app/`
@@ -125,35 +131,36 @@ Dentro de la configuración del __Dockerfile__, instala __composer__.
    
 ---
 
-## ¿CÓMO CREAR UN PROYECTO LARAVEL v9.x CON ESTA RECETA?
+## 3. ¿CÓMO CREAR UN PROYECTO LARAVEL v9.x CON ESTA RECETA?
 
-1. Levantar este proyecto como se indica en el proceso anterior.
+1. Levantar este proyecto tal cual se describe en __¿Cómo usar esta receta con un proyecto php - Sin Frameworks?__
 2. Entrar al contenedor del servicio `app`usando el siguiente comando:
 
    ```bash
    docker exec -it <container-name> bash
    ```
-3. Una vez dentro, instalar `laravel` con el siguiente comando
+3. Una vez dentro, eliminar el archivo `index.php`
+4. Instalar `laravel` con el siguiente comando
    
    ```bash
    composer global require laravel/installer
    ```
 
-4. Ejecutar los siguientes dos comandos:
+5. Ejecutar los siguientes dos comandos:
 
    ```bash
    echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
    source ~/.bashrc
    ```
    
-5. Verificar que ya se tiene el comando `laravel` disponible:
+6. Verificar que ya se tiene el comando `laravel` disponible:
 
    ```bash
    laravel --version
    # Laravel Installer 4.2.10
    ```
 
-6. Crear el proyecto laravel con el siguiente comando:
+7. Crear el proyecto laravel con el siguiente comando:
 
    ```bash
    laravel new app-name
