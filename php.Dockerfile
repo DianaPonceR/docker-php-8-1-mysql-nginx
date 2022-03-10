@@ -36,7 +36,7 @@ RUN echo 'xdebug.remote_enable = 1' >> /usr/local/etc/php/conf.d/docker-php-ext-
     echo "xdebug.client_port = 9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.mode = debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-COPY ./start-container.sh /var/www/api-rest-curso-pl/start-container.sh
+# COPY ./start-container.sh /var/www/api-rest-curso-pl/start-container.sh
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
